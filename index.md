@@ -2,7 +2,6 @@
 - What and Why k8s
 - K8s architecture
 - Pod
-  - container
   - initContainers
 - Namespaces
 - Labels & Selectors
