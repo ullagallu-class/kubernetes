@@ -2,6 +2,8 @@
 - What and Why k8s
 - K8s architecture
 - Pod
+  - container
+  - initContainers
 - Namespaces
 - Labels & Selectors
 
@@ -14,7 +16,6 @@
 # Day-3
 - ConfigMap
 - Secrets
-- initContainers
 - Probes
 - Resource Management[Requests and limits]
 
@@ -25,7 +26,7 @@
 - emptyDir
 
 # Day-5
-- Manifestigation of Expense
+- Manifestation of Expense
 - Helmfy Expense
 
 # Day-6
@@ -51,6 +52,7 @@
 - Taints & Tolerations
 
 # Day-11
+- Resource Quotas
 - Limit Ranges
 - HV
 - ESO
@@ -60,6 +62,7 @@
 
 # Day-13
 - Logging
+- Daemonset
 - hostPath
 
 # Day-14
