@@ -21,13 +21,15 @@
 - ConfigMap
 - Secrets
 - Probes
-- Resource Management[Requests and limits]
 
 # Day-5
 - StatefulSet
-- Dynamic & Static Volume Provisioning[EBS CSI Driver Installation&PodIdentity]
 - Headless Service
 - emptyDir
+
+- Dynamic & Static Volume Provisioning[EBS CSI Driver Installation&PodIdentity]
+  - volumes reclaims
+  - accessMode
 
 # Day-6
 - Manifestation of Expense
@@ -46,8 +48,8 @@
 - Annotations
 
 # Day-10
-- RBAC
 - ServiceAccount
+- RBAC
 - Network Policy
 
 # Day-11

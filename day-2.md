@@ -193,6 +193,78 @@ kubectl rollout undo deployment myapp
 | Recommended for production     | ❌ No                | ❌ No       | ✅ Yes      |
 
 
+# **Resource Management in Kubernetes (Requests & Limits)**  
+
+Kubernetes allows **resource management** for CPU and memory to **ensure fair allocation** among containers. This is done using **requests** and **limits**.
+
+---
+
+## **1️⃣ What are Requests and Limits?**
+
+| **Parameter**  | **Definition** | **Purpose** |
+|---------------|--------------|-------------|
+| **Requests** | Minimum CPU/Memory a container is guaranteed. | Ensures the container gets at least this much. |
+| **Limits** | Maximum CPU/Memory a container can use. | Prevents the container from exceeding this limit. |
+
+---
+
+## **2️⃣ Example of CPU & Memory Requests/Limits**
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-limits-example
+spec:
+  containers:
+  - name: my-container
+    image: busybox
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+```
+📌 **Explanation**  
+- `requests.memory: "64Mi"` → The container is **guaranteed** 64MB of memory.  
+- `requests.cpu: "250m"` → The container is **guaranteed** 250 millicores (0.25 vCPU).  
+- `limits.memory: "128Mi"` → The container **cannot exceed** 128MB of memory.  
+- `limits.cpu: "500m"` → The container **cannot use more** than 500 millicores (0.5 vCPU).  
+
+---
+
+## **3️⃣ What Happens If a Container Exceeds Requests or Limits?**  
+
+| **Scenario** | **Effect on CPU** | **Effect on Memory** |
+|-------------|----------------|----------------|
+| **Exceeds Requests** | May get throttled (slowed down). | No effect (as long as within limits). |
+| **Exceeds Limits** | No effect (Kubernetes does not enforce CPU limits strictly). | Container is **Killed with OOM (Out of Memory) Error**. |
+
+**💡 CPU overuse leads to throttling, while Memory overuse leads to termination.**
+
+---
+
+## **4️⃣ Checking Resource Usage**
+```bash
+kubectl describe pod resource-limits-example
+```
+```bash
+kubectl top pod resource-limits-example
+```
+
+---
+
+## **5️⃣ Best Practices**
+✔️ **Set Requests** to ensure the Pod gets enough resources.  
+✔️ **Set Limits** to prevent a single Pod from consuming all resources.  
+✔️ **Use Monitoring** (Prometheus, Metrics Server) to track resource usage.  
+
+---
+
+🚀 **Proper resource management helps avoid performance issues, crashes, and inefficient resource usage in Kubernetes!**
+
+
 ### **What is HPA (Horizontal Pod Autoscaler) in Kubernetes?**  
 Horizontal Pod Autoscaler (**HPA**) automatically **scales the number of Pods** in a Deployment, ReplicaSet, or StatefulSet based on **CPU, memory, or custom metrics**.  
 
