@@ -9,68 +9,72 @@
 # Day-2
 - Replicaset & Replication Controller
 - Deployment
-- Services[ClusterIP,NodePort,LoadBalancer,ExternalName]
 - HPA
 
 # Day-3
+- Services[ClusterIP,NodePort,LoadBalancer,ExternalName]
+- DNS pod
+- CoreDNS 
+
+# Day-4
 - ConfigMap
 - Secrets
 - Probes
 - Resource Management[Requests and limits]
 
-# Day-4
+# Day-5
 - StatefulSet
 - Dynamic & Static Volume Provisioning[EBS CSI Driver Installation&PodIdentity]
 - Headless Service
 - emptyDir
 
-# Day-5
+# Day-6
 - Manifestation of Expense
 - Helmfy Expense
 
-# Day-6
+# Day-7
 - Manifestigation of Instana
 - Helmfy Instana
 
-# Day-7
+# Day-8
 - Terraform EKS Cluster 
 
-# Day-8
+# Day-9
 - Ingress
 - External DNS
 - Annotations
 
-# Day-9
+# Day-10
 - RBAC
 - ServiceAccount
 - Network Policy
 
-# Day-10
+# Day-11
 - NodeSelector
 - Affinity & Anti Affinity
 - Taints & Tolerations
 
-# Day-11
+# Day-12
 - Resource Quotas
 - Limit Ranges
 - HV
 - ESO
 
-# Day-12
+# Day-13
 - Monitoring
 
-# Day-13
+# Day-14
 - Logging
 - Daemonset
 - hostPath
 
-# Day-14
+# Day-15
 - ISTIO[SideCar & Envoy]
 
-# Day-15
+# Day-16
 - Cluster Upgration 
 
-# Day-16
+# Day-17
 - Karpenter
 - ArGoCD
 
