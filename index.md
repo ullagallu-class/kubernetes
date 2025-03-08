@@ -9,6 +9,7 @@
 # Day-2
 - Replicaset & Replication Controller
 - Deployment
+- Job & CronJOb
 - HPA
 
 # Day-3

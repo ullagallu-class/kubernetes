@@ -394,6 +394,138 @@ kubectl delete job example-job
 ✔️ **One-Time Migrations:** Running database schema updates.  
 ✔️ **Load Testing:** Generating traffic for performance testing.  
 
+### **CronJob in Kubernetes**  
+
+A **CronJob** in Kubernetes is used to **schedule and run Jobs at specific intervals**, similar to Linux cron jobs. It automates periodic or recurring tasks.  
+
+---
+
+### **Key Features of CronJob**  
+✅ Runs jobs at **fixed schedules** (daily, hourly, weekly, etc.)  
+✅ Uses **cron expressions** to define schedules  
+✅ Automatically **creates and cleans up Jobs**  
+✅ Supports **parallelism and retries**  
+✅ Useful for **backups, log rotations, and report generation**  
+
+---
+
+### **Example 1: Basic CronJob (Runs Every Minute)**  
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello-cron
+spec:
+  schedule: "*/1 * * * *"  # Every 1 minute
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: busybox
+            image: busybox
+            command: ["echo", "Hello from CronJob!"]
+          restartPolicy: Never
+```
+🔹 **This CronJob prints "Hello from CronJob!" every minute.**  
+
+---
+
+### **Example 2: CronJob Running Every Day at Midnight**  
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-backup
+spec:
+  schedule: "0 0 * * *"  # Runs at 12:00 AM daily
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: busybox
+            image: busybox
+            command: ["sh", "-c", "echo 'Backup running...'"]
+          restartPolicy: OnFailure
+```
+🔹 **Runs every day at midnight and prints "Backup running..."**  
+
+---
+
+### **Understanding CronJob Schedule Format (`schedule:`)**  
+| Field  | Value | Description |
+|--------|------|-------------|
+| Minute | 0-59  | At what minute to run |
+| Hour   | 0-23  | At what hour to run |
+| Day    | 1-31  | On which day of the month |
+| Month  | 1-12  | In which month |
+| Weekday | 0-6  | Day of the week (Sunday=0) |
+
+#### **Examples**  
+| Expression | Meaning |
+|------------|----------|
+| `"*/5 * * * *"` | Every 5 minutes |
+| `"0 * * * *"` | Every hour |
+| `"0 12 * * *"` | Every day at 12 PM |
+| `"0 0 1 * *"` | On the 1st of every month |
+| `"0 0 * * 0"` | Every Sunday at midnight |
+
+---
+
+### **Example 3: CronJob with Automatic Cleanup (TTL)**
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-logs
+spec:
+  schedule: "0 3 * * *"  # Runs at 3 AM every day
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600  # Delete job after 1 hour
+      template:
+        spec:
+          containers:
+          - name: busybox
+            image: busybox
+            command: ["sh", "-c", "rm -rf /var/logs/*.log"]
+          restartPolicy: OnFailure
+```
+🔹 **This CronJob deletes log files at 3 AM daily and removes jobs after 1 hour.**  
+
+---
+
+### **Check and Manage CronJobs**  
+✅ **List CronJobs:**  
+```bash
+kubectl get cronjobs
+```  
+✅ **Check CronJob execution history:**  
+```bash
+kubectl get jobs
+```  
+✅ **Describe a CronJob:**  
+```bash
+kubectl describe cronjob hello-cron
+```  
+✅ **Manually trigger a CronJob:**  
+```bash
+kubectl create job --from=cronjob/hello-cron manual-run
+```  
+✅ **Delete a CronJob:**  
+```bash
+kubectl delete cronjob hello-cron
+```  
+
+---
+
+### **Use Cases for CronJobs in Kubernetes**  
+✔️ **Automated Backups** (Database, Logs, File storage)  
+✔️ **Periodic Maintenance Tasks** (Cleanup old data, Delete logs)  
+✔️ **Report Generation** (Daily analytics, Logs summary)  
+✔️ **Batch Processing** (ETL jobs, Data aggregation)  
+✔️ **Triggering External APIs** (Pinging health checks, Sending notifications)  
 
 # Lab
 ### **Exercise: Practice HPA (Horizontal Pod Autoscaler) with Deployment & Job Controller**  
