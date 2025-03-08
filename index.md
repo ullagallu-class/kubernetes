@@ -9,8 +9,10 @@
 # Day-2
 - Replicaset & Replication Controller
 - Deployment
-- Job & CronJOb
+- Resource Management
+- Metrics Server
 - HPA
+- Job & CronJob
 
 # Day-3
 - Services[ClusterIP,NodePort,LoadBalancer,ExternalName]
@@ -32,30 +34,30 @@
   - accessMode
 
 # Day-6
-- Manifestation of Expense
-- Helmfy Expense
-
-# Day-7
-- Manifestigation of Instana
-- Helmfy Instana
-
-# Day-8
-- Terraform EKS Cluster 
-
-# Day-9
-- Ingress
-- External DNS
-- Annotations
-
-# Day-10
 - ServiceAccount
 - RBAC
 - Network Policy
 
-# Day-11
+# Day-7
 - NodeSelector
 - Affinity & Anti Affinity
 - Taints & Tolerations
+
+# Day-8
+- Manifestation of Expense
+- Helmfy Expense
+
+# Day-9
+- Manifestigation of Instana
+- Helmfy Instana
+
+# Day-10
+- Terraform EKS Cluster 
+
+# Day-11
+- Ingress
+- External DNS
+- Annotations
 
 # Day-12
 - Resource Quotas
@@ -75,7 +77,7 @@
 - ISTIO[SideCar & Envoy]
 
 # Day-16
-- Cluster Upgration 
+- Cluster Upgradation 
 
 # Day-17
 - Karpenter
