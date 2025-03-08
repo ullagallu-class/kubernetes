@@ -182,6 +182,18 @@ If the new version has issues, rollback to the previous version:
 kubectl rollout undo deployment myapp
 ```
 
+
+| Feature                        | ReplicationController | ReplicaSet | Deployment |
+|--------------------------------|----------------------|------------|------------|
+| Ensures a fixed number of Pods | ✅ Yes               | ✅ Yes      | ✅ Yes      |
+| Replaces failed Pods           | ✅ Yes               | ✅ Yes      | ✅ Yes      |
+| Supports rolling updates       | ❌ No                | ❌ No       | ✅ Yes      |
+| Supports rollback              | ❌ No                | ❌ No       | ✅ Yes      |
+| Manages multiple ReplicaSets   | ❌ No                | ❌ No       | ✅ Yes      |
+| Supports declarative updates   | ❌ No                | ✅ Yes      | ✅ Yes      |
+| Recommended for production     | ❌ No                | ❌ No       | ✅ Yes      |
+
+
 ### **What is HPA (Horizontal Pod Autoscaler) in Kubernetes?**  
 Horizontal Pod Autoscaler (**HPA**) automatically **scales the number of Pods** in a Deployment, ReplicaSet, or StatefulSet based on **CPU, memory, or custom metrics**.  
 
