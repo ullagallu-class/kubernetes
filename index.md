@@ -14,8 +14,8 @@
 
 # Day-3
 - Services[ClusterIP,NodePort,LoadBalancer,ExternalName]
-- DNS pod
-- CoreDNS 
+- CoreDNS pods
+- kube-dns service
 
 # Day-4
 - ConfigMap
