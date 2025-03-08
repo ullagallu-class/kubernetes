@@ -151,7 +151,11 @@ kubectl apply -f mypod.yaml
 #### **15. Delete a Pod from a YAML File**  
 ```bash
 kubectl delete -f mypod.yaml
-```  
+``` 
+### **16. Creating yaml definition from kubectl command**
+```bash
+kubectl run mypod --image=nginx --dry-run=client -o yaml > mypod.yaml
+```
 
 ### What is a Pause Container?  
 A Pause Container is a special container that acts as the parent container for all containers within a Pod in Kubernetes. It is created automatically by Kubernetes when a Pod is scheduled.  
