@@ -284,7 +284,116 @@ metrics:
 ## **When to Use HPA?**
 ✅ Applications with **variable traffic** (e.g., web apps, APIs).  
 ✅ Ensuring **high availability** during peak loads.  
-✅ Cost optimization by **scaling down** unused resources.  
+✅ Cost optimization by **scaling down** unused resources. 
+
+### **Job Controller in Kubernetes**  
+
+The **Job Controller** in Kubernetes is responsible for managing **short-lived** workloads that **run a task to completion** instead of continuously running like Deployments or StatefulSets.  
+
+#### **Key Features of Job Controller:**  
+✅ Runs **pods to execute a task** and ensures completion.  
+✅ **Retries failed pods** automatically.  
+✅ Supports **parallel execution** of tasks.  
+✅ Deletes completed pods (based on TTL).  
+✅ Used for **batch processing, cron jobs, and data processing.**  
+
+---
+
+### **How Job Works:**  
+1. **A Job creates one or more Pods** to run a task.  
+2. **Pods execute the job until completion.**  
+3. **If a pod fails, the Job creates a new pod to retry.**  
+4. **Once all required completions are met, the Job is marked as complete.**  
+
+---
+
+### **Example 1: Basic Job (Single Pod Execution)**
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: example-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["echo", "Hello, Kubernetes!"]
+      restartPolicy: Never
+```
+🔹 **This Job runs once, prints "Hello, Kubernetes!", then exits.**  
+
+---
+
+### **Example 2: Parallel Jobs (Multiple Pods Running Together)**
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: parallel-job
+spec:
+  parallelism: 3   # Run 3 pods at the same time
+  completions: 6   # Total 6 pods must complete successfully
+  template:
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["echo", "Processing Data"]
+      restartPolicy: Never
+```
+🔹 **This Job starts 3 pods at a time (`parallelism: 3`) until 6 pods finish successfully (`completions: 6`).**  
+
+---
+
+### **Example 3: Job with Automatic Cleanup (TTL)**
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: auto-delete-job
+spec:
+  ttlSecondsAfterFinished: 60  # Delete job after 60 seconds
+  template:
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["sleep", "5"]
+      restartPolicy: Never
+```
+🔹 **This Job automatically deletes itself after 60 seconds.**  
+
+---
+
+### **Check Job Status & Logs**
+✅ **Check running jobs:**  
+```bash
+kubectl get jobs
+```
+✅ **Describe job details:**  
+```bash
+kubectl describe job example-job
+```
+✅ **Check Job logs:**  
+```bash
+kubectl logs -l job-name=example-job
+```
+✅ **Delete completed jobs manually:**  
+```bash
+kubectl delete job example-job
+```
+
+---
+
+### **Use Cases of Jobs in Kubernetes**
+✔️ **Data Processing:** Running scripts to process logs or database records.  
+✔️ **Batch Tasks:** Sending bulk emails, generating reports.  
+✔️ **Backup & Cleanup:** Automating system cleanup, backups, and maintenance.  
+✔️ **One-Time Migrations:** Running database schema updates.  
+✔️ **Load Testing:** Generating traffic for performance testing.  
+
 
 # Lab
 ### **Exercise: Practice HPA (Horizontal Pod Autoscaler) with Deployment & Job Controller**  
