@@ -232,7 +232,12 @@ kubectl config set-context --current --namespace=<namespace-name>
 6. Run a Pod in a Specific Namespace  
 ```bash
 kubectl run nginx --image=nginx -n <namespace-name>
-```  
+```
+
+7. Get the current namespace
+```bash
+kubectl config view --minify --output 'jsonpath={..namespace}'
+```
 
 ### Default Namespaces in Kubernetes  
 - default → Used when no namespace is specified.  
