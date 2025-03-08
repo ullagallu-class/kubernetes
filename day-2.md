@@ -182,7 +182,6 @@ If the new version has issues, rollback to the previous version:
 kubectl rollout undo deployment myapp
 ```
 
-
 | Feature                        | ReplicationController | ReplicaSet | Deployment |
 |--------------------------------|----------------------|------------|------------|
 | Ensures a fixed number of Pods | ✅ Yes               | ✅ Yes      | ✅ Yes      |
