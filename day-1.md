@@ -133,32 +133,22 @@ kubectl delete pod mypod
 kubectl delete pods --all -n <namespace-name>
 ```  
 
-#### **12. Restart a Pod (Delete and Recreate in a Deployment/ReplicaSet)**  
-```bash
-kubectl rollout restart deployment mydeployment
-```  
-
-#### **13. Get Pod Events and Reasons for Failures**  
-```bash
-kubectl get events --sort-by=.metadata.creationTimestamp
-```  
-
-#### **14. Get Pod Resource Usage (CPU & Memory)**  
+#### **12. Get Pod Resource Usage (CPU & Memory)**  
 ```bash
 kubectl top pod
 ```  
 
-#### **15. Get Pod's YAML Definition**  
+#### **13. Get Pod's YAML Definition**  
 ```bash
 kubectl get pod mypod -o yaml
 ```  
 
-#### **16. Create a Pod from a YAML File**  
+#### **14. Create a Pod from a YAML File**  
 ```bash
 kubectl apply -f mypod.yaml
 ```  
 
-#### **17. Delete a Pod from a YAML File**  
+#### **15. Delete a Pod from a YAML File**  
 ```bash
 kubectl delete -f mypod.yaml
 ```  
