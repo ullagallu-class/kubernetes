@@ -66,7 +66,9 @@
 - ESO
 
 # Day-13
-- Monitoring
+- Monitoring[Proemtheus&Grafana]
+- NodeExporter
+- ec2 labels to dynamically monitor nodes
 
 # Day-14
 - Logging
