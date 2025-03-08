@@ -286,3 +286,123 @@ metrics:
 ✅ Ensuring **high availability** during peak loads.  
 ✅ Cost optimization by **scaling down** unused resources.  
 
+# Lab
+### **Exercise: Practice HPA (Horizontal Pod Autoscaler) with Deployment & Job Controller**  
+
+In this exercise, you will:  
+1. Deploy an **Nginx-based Deployment**.  
+2. Expose it as a service.  
+3. Apply **HPA** to scale based on CPU usage.  
+4. Use a **Job Controller** to generate load and trigger autoscaling.  
+
+---
+
+## **Step 1: Create a Deployment**  
+Create a file `deployment.yaml`:  
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        resources:
+          requests:
+            cpu: "250m"
+          limits:
+            cpu: "500m"
+```
+
+Apply the Deployment:  
+```bash
+kubectl apply -f deployment.yaml
+```
+
+---
+
+## **Step 2: Expose the Deployment as a Service**  
+```bash
+kubectl expose deployment nginx-deployment --type=ClusterIP --port=80 --target-port=80
+```
+
+Verify the service:  
+```bash
+kubectl get svc
+```
+
+---
+
+## **Step 3: Apply HPA to Autoscale Based on CPU Usage**  
+```bash
+kubectl autoscale deployment nginx-deployment --cpu-percent=50 --min=1 --max=5
+```
+
+Check HPA status:  
+```bash
+kubectl get hpa
+```
+
+---
+
+## **Step 4: Generate Load Using a Job Controller**  
+Create a file `job.yaml`:  
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-generator
+spec:
+  template:
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["/bin/sh", "-c", "while true; do wget -q -O- http://nginx-deployment.default.svc.cluster.local; done"]
+      restartPolicy: Never
+```
+
+Apply the Job:  
+```bash
+kubectl apply -f job.yaml
+```
+
+---
+
+## **Step 5: Observe Autoscaling**  
+- Check the number of Pods:  
+  ```bash
+  kubectl get pods
+  ```  
+- Check HPA events:  
+  ```bash
+  kubectl describe hpa
+  ```  
+- Monitor CPU usage:  
+  ```bash
+  kubectl top pods
+  ```
+
+---
+
+## **Step 6: Clean Up**  
+```bash
+kubectl delete -f deployment.yaml
+kubectl delete svc nginx-deployment
+kubectl delete -f job.yaml
+kubectl delete hpa nginx-deployment
+```
+---
+
