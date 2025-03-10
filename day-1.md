@@ -40,6 +40,7 @@ Worker nodes host and execute containerized applications.
 - `Pods` → The smallest deployable unit in Kubernetes that contains one or more containers.
 
 - EKS cluster creation with eksctl with yaml definition
+- `kubectl (Kubernetes command-line tool)` is used to interact with Kubernetes clusters. It allows you to deploy applications, inspect and manage cluster resources, and troubleshoot issues in a Kubernetes environment.
 
 # NameSpaces
 ### What is a Namespace in Kubernetes?  
