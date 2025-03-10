@@ -37,44 +37,68 @@ Worker nodes host and execute containerized applications.
 - `Kubelet` → Communicates with the control plane, ensuring Pods are running as expected.  
 - `Container` Runtime (Docker, containerd, CRI-O, etc.) → Runs and manages containerized workloads.  
 - `Kube Proxy` → Manages networking and load balancing between Pods and Services.  
-- `Pods` → The smallest deployable unit in Kubernetes that contains one or more containers.  
+- `Pods` → The smallest deployable unit in Kubernetes that contains one or more containers.
+
+- EKS cluster creation with eksctl with yaml definition
+
+# NameSpaces
+### What is a Namespace in Kubernetes?  
+A **Namespace** in Kubernetes is a way to logically isolate resources within a cluster. It allows multiple teams or applications to share a single cluster while keeping their resources separate.  
+
+### Use Cases of Namespaces  
+1. Multi-Tenancy → Different teams or projects can use separate namespaces to avoid resource conflicts.  
+2. Resource Isolation → Ensures that different applications do not interfere with each other.  
+3. Access Control → Role-Based Access Control (RBAC) can be applied at the namespace level for security.  
+4. Resource Quotas → Helps in limiting CPU, memory, and storage usage per namespace.  
+5. Organized Management → Allows grouping related resources, making it easier to manage complex clusters.  
+
+### Common Namespace Commands  
+
+1. View Existing Namespaces  
+```bash
+kubectl get namespaces  
+```  
+
+2. Create a New Namespace  
+```bash
+kubectl create namespace <namespace-name>
+```  
+
+3. Delete a Namespace  
+```bash
+kubectl delete namespace <namespace-name>
+```  
+
+4. View Resources in a Specific Namespace  
+```bash
+kubectl get pods -n <namespace-name>
+kubectl get services -n <namespace-name>
+```  
+
+5. Set a Default Namespace for kubectl  
+```bash
+kubectl config set-context --current --namespace=<namespace-name>
+```  
+
+6. Run a Pod in a Specific Namespace  
+```bash
+kubectl run nginx --image=nginx -n <namespace-name>
+```
+
+7. Get the current namespace
+```bash
+kubectl config view --minify --output 'jsonpath={..namespace}'
+```
+
+### Default Namespaces in Kubernetes  
+- default → Used when no namespace is specified.  
+- kube-system → Contains system-related components like the API server and controller manager.  
+- kube-public → Accessible to all users; used for public information.  
+- kube-node-lease → Manages node heartbeats to determine availability.  
 
 # Pod
-
 ### What is a Pod?  
-A Pod is the smallest deployable unit in Kubernetes. It represents a logical host for one or more containers that share the same network and storage.  
-
-### Pod Lifecycle  
-A Pod goes through different phases from creation to termination. The Pod Lifecycle Phases are:  
-
-1. Pending → The Pod is created but not yet scheduled on a Node.  
-2. Running → The Pod is scheduled on a Node, and all containers are running or starting.  
-3. Succeeded → All containers in the Pod have completed successfully and will not restart.  
-4. Failed → One or more containers in the Pod have failed, and Kubernetes will not restart them.  
-5. Unknown → The Pod state cannot be determined due to communication failure with the Node.  
-
-### Difference Between Container and Pod  
-
-Feature | Container | Pod  
---- | --- | ---  
-Definition | A lightweight, standalone executable unit that includes the application and dependencies. | A Kubernetes object that manages one or more containers as a unit.  
-Networking | Has its own isolated network namespace. | Shares a network namespace with other containers inside the Pod.  
-Storage | Uses ephemeral storage by default. | Can attach persistent storage and share it among containers.  
-Scaling | Cannot be directly scaled in Kubernetes. | Scales as a whole unit in Kubernetes.  
-Management | Managed by container runtimes (Docker, containerd). | Managed by Kubernetes.  
-
-### InitContainers  
-InitContainers are special containers that run before the main application containers in a Pod.  
-
-### Why Use InitContainers?  
-- To prepare the environment before the main application starts.  
-- To ensure dependencies are met (e.g., waiting for a database to be ready).  
-- To perform setup tasks like downloading configuration files.  
-
-### Key Points  
-- Runs sequentially before the main container starts.  
-- Can have different images from the main container.  
-- If an InitContainer fails, Kubernetes retries it until it succeeds or the Pod fails. 
+A Pod is the smallest deployable unit in Kubernetes. It represents a logical host for one or more containers that share the same network and storage.
 
 ### **Pod Management Commands in Kubernetes**  
 
@@ -157,6 +181,38 @@ kubectl delete -f mypod.yaml
 kubectl run mypod --image=nginx --dry-run=client -o yaml > mypod.yaml
 ```
 
+### Pod Lifecycle  
+A Pod goes through different phases from creation to termination. The Pod Lifecycle Phases are:  
+
+1. Pending → The Pod is created but not yet scheduled on a Node.  
+2. Running → The Pod is scheduled on a Node, and all containers are running or starting.  
+3. Succeeded → All containers in the Pod have completed successfully and will not restart.  
+4. Failed → One or more containers in the Pod have failed, and Kubernetes will not restart them.  
+5. Unknown → The Pod state cannot be determined due to communication failure with the Node.  
+
+### Difference Between Container and Pod  
+
+Feature | Container | Pod  
+--- | --- | ---  
+Definition | A lightweight, standalone executable unit that includes the application and dependencies. | A Kubernetes object that manages one or more containers as a unit.  
+Networking | Has its own isolated network namespace. | Shares a network namespace with other containers inside the Pod.  
+Storage | Uses ephemeral storage by default. | Can attach persistent storage and share it among containers.  
+Scaling | Cannot be directly scaled in Kubernetes. | Scales as a whole unit in Kubernetes.  
+Management | Managed by container runtimes (Docker, containerd). | Managed by Kubernetes.  
+
+### InitContainers  
+InitContainers are special containers that run before the main application containers in a Pod.  
+
+### Why Use InitContainers?  
+- To prepare the environment before the main application starts.  
+- To ensure dependencies are met (e.g., waiting for a database to be ready).  
+- To perform setup tasks like downloading configuration files.  
+
+### Key Points  
+- Runs sequentially before the main container starts.  
+- Can have different images from the main container.  
+- If an InitContainer fails, Kubernetes retries it until it succeeds or the Pod fails. 
+
 ### What is a Pause Container?  
 A Pause Container is a special container that acts as the parent container for all containers within a Pod in Kubernetes. It is created automatically by Kubernetes when a Pod is scheduled.  
 
@@ -189,61 +245,6 @@ crictl ps | grep pause
 - It acts as a namespace holder for networking and process sharing.  
 - It ensures that the Pod’s IP and network remain stable, even if application containers restart.  
 - It uses very low resources since it only runs a sleep process.  
-
-# NameSpaces
-### What is a Namespace in Kubernetes?  
-A **Namespace** in Kubernetes is a way to logically isolate resources within a cluster. It allows multiple teams or applications to share a single cluster while keeping their resources separate.  
-
-### Use Cases of Namespaces  
-1. Multi-Tenancy → Different teams or projects can use separate namespaces to avoid resource conflicts.  
-2. Resource Isolation → Ensures that different applications do not interfere with each other.  
-3. Access Control → Role-Based Access Control (RBAC) can be applied at the namespace level for security.  
-4. Resource Quotas → Helps in limiting CPU, memory, and storage usage per namespace.  
-5. Organized Management → Allows grouping related resources, making it easier to manage complex clusters.  
-
-### Common Namespace Commands  
-
-1. View Existing Namespaces  
-```bash
-kubectl get namespaces  
-```  
-
-2. Create a New Namespace  
-```bash
-kubectl create namespace <namespace-name>
-```  
-
-3. Delete a Namespace  
-```bash
-kubectl delete namespace <namespace-name>
-```  
-
-4. View Resources in a Specific Namespace  
-```bash
-kubectl get pods -n <namespace-name>
-kubectl get services -n <namespace-name>
-```  
-
-5. Set a Default Namespace for kubectl  
-```bash
-kubectl config set-context --current --namespace=<namespace-name>
-```  
-
-6. Run a Pod in a Specific Namespace  
-```bash
-kubectl run nginx --image=nginx -n <namespace-name>
-```
-
-7. Get the current namespace
-```bash
-kubectl config view --minify --output 'jsonpath={..namespace}'
-```
-
-### Default Namespaces in Kubernetes  
-- default → Used when no namespace is specified.  
-- kube-system → Contains system-related components like the API server and controller manager.  
-- kube-public → Accessible to all users; used for public information.  
-- kube-node-lease → Manages node heartbeats to determine availability.  
 
 # Labels & Selectors
 ### Labels & Selectors in Kubernetes  
