@@ -1,7 +1,20 @@
 # What and Why K8s
 
-- Container is a great way to package and run application, but in production, we need high availability (HA) and scalability. If one container fails, another should start automatically.  
-- Kubernetes (K8) is an open-source container orchestration tool that automates application deployment, ensures HA, and scales application.  
+Containers are a good way to bundle and run your applications. In a production environment, you need to manage the containers that run the applications and ensure that there is no downtime. For example, if a container goes down, another container needs to start.
+
+Kubernetes provides you with a framework to run distributed systems resiliently. It takes care of scaling and failover for your application, provides deployment patterns
+
+In Kubernetes, **resiliently** means that your application can handle failures and disruptions without significant downtime or manual intervention. Kubernetes ensures resilience by:  
+
+1. **Self-healing** – If a pod crashes, Kubernetes automatically restarts it. If a node fails, pods are rescheduled to a healthy node.  
+2. **Scaling** – It dynamically scales up or down based on load, ensuring the system adapts to demand.  
+3. **Load balancing** – Traffic is distributed among healthy pods, preventing overload on a single instance.  
+4. **Rolling updates & rollbacks** – It deploys updates gradually and can revert if an issue occurs.  
+5. **Fault tolerance** – With multi-node clusters, failures in one node don’t impact the entire application.  
+
+Essentially, **Kubernetes ensures that your system remains operational and performs well, even when failures occur.**
+
+Kubernetes (K8) is an open-source container orchestration tool that automates application deployment, ensures HA, and scales application.  
 
 **Key Features of K8**  
 
