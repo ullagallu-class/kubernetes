@@ -332,25 +332,8 @@ kubectl get pods -l app=nginx
 #### 5. Get Resources with Multiple Label Conditions  
 ```bash
 kubectl get pods -l app=nginx,env=dev
-```  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-########### Extra notes
+``` 
+---
 Yes! A **Kubernetes Cluster** consists of **Control Plane Nodes** and **Worker Nodes**.  
 
 ### **Control Plane Responsibilities**  
