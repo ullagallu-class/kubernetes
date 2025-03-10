@@ -313,3 +313,82 @@ search default.svc.cluster.local svc.cluster.local cluster.local
 |------------|----------|-------------|
 | **Pod-Level Custom DNS** | A specific Pod | Modify `dnsConfig` in the Pod YAML. |
 | **Cluster-Wide Custom DNS** | All Pods | Update CoreDNS ConfigMap (`forward` plugin). |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Extra notes
+### **What is `kube-proxy`?**  
+`kube-proxy` is a **networking component in Kubernetes** that maintains **network rules** on each node to enable communication between **Pods and Services**. It acts as a **service proxy** for directing traffic.
+
+---
+
+### **🔹 What Does `kube-proxy` Do?**
+1. **Handles Service-to-Pod Communication**  
+   - Ensures traffic from a **Service** reaches the correct **Pod(s)**.
+   
+2. **Implements Load Balancing**  
+   - Distributes traffic across multiple Pods in a Service.
+   
+3. **Manages Network Rules**  
+   - Uses **iptables** (or **IPVS**) to route requests based on Kubernetes Service configurations.
+   
+4. **Enables Cluster Networking**  
+   - Ensures that requests between nodes and pods work efficiently.
+
+---
+
+### **🔹 How `kube-proxy` Works?**
+1. **Listens to the API Server**  
+   - Watches for changes in Services and Endpoints (Pods linked to a Service).
+
+2. **Creates Network Rules**  
+   - Configures `iptables` (or `ipvs`) to route traffic to the correct Pods.
+
+3. **Handles Traffic Routing**  
+   - Ensures external/internal requests reach the correct destination.
+
+---
+
+### **🔹 Modes of `kube-proxy`**
+1. **iptables Mode (Default)**
+   - Uses Linux **iptables** to handle routing rules.
+   - Efficient but can become slow with large clusters.
+
+2. **IPVS Mode (Recommended for Large Clusters)**
+   - Uses **IP Virtual Server (IPVS)** for high-performance routing.
+   - Provides better load balancing.
+
+3. **Userspace Mode (Deprecated)**
+   - Was used in earlier versions but is now **obsolete**.
+
+---
+
+### **🔹 Example: How `kube-proxy` Routes Traffic?**  
+Imagine you have a **Service** that exposes **Pods** on `ClusterIP: 10.0.0.1`. When a request comes:
+
+1. `kube-proxy` checks which Pods are behind the Service.
+2. It finds that `Pod A (10.0.1.2)` and `Pod B (10.0.1.3)` belong to the Service.
+3. It forwards the request to **one of the Pods** based on a load-balancing strategy.
+
+---
+
+### **🔹 Key Takeaways**
+✅ **`kube-proxy` is essential for Kubernetes networking.**  
+✅ It ensures **Services can communicate with Pods** reliably.  
+✅ Uses **iptables or IPVS** to **route traffic efficiently**.  
+✅ Required for both **internal and external traffic routing** in a cluster.  
