@@ -1,4 +1,4 @@
-# Day-1
+# Day-1[kubeadm]
 - What and Why k8s
 - K8s architecture
 - Pod
@@ -6,7 +6,7 @@
 - Namespaces
 - Labels & Selectors
 
-# Day-2
+# Day-2[kubeadm]
 - Replicaset & Replication Controller
 - Deployment
 - Resource Management
@@ -14,8 +14,8 @@
 - HPA
 - Job & CronJob
 
-# Day-3
-- Services[ClusterIP,NodePort,LoadBalancer,ExternalName]
+# Day-3[kubeadm]
+- Services[ClusterIP,NodePort]
 - CoreDNS pods
 - kube-dns service
 
@@ -44,6 +44,7 @@
 - Taints & Tolerations
 
 # Day-8
+- ExternalName Service
 - Manifestation of Expense
 - Helmfy Expense
 
@@ -55,6 +56,7 @@
 - Terraform EKS Cluster 
 
 # Day-11
+- LoadBalancer Service
 - Ingress
 - External DNS
 - Annotations
