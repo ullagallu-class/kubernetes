@@ -26,7 +26,7 @@ Kubernetes (K8) is an open-source container orchestration tool that automates ap
 - `IPv4 & IPv6 Support` → Supports both IP versions for networking.  
 - `Extend K8 Functionality` → Use Custom Resource Definition (CRD) to add extra features.  
 - `Resource Limits` → Define CPU and RAM limits for container to optimize resource usage.  
-
+---
 # K8s Architecture
 
 Kubernetes (K8s) is a distributed architecture by default. It is designed to manage containerized applications across multiple nodes in a cluster, ensuring high availability, scalability, and resilience.
@@ -54,7 +54,7 @@ Worker nodes host and execute containerized applications.
 
 - EKS cluster creation with eksctl with yaml definition
 - `kubectl (Kubernetes command-line tool)` is used to interact with Kubernetes clusters. It allows you to deploy applications, inspect and manage cluster resources, and troubleshoot issues in a Kubernetes environment.
-
+---
 # NameSpaces
 ### What is a Namespace in Kubernetes?  
 A **Namespace** in Kubernetes is a way to logically isolate resources within a cluster. It allows multiple teams or applications to share a single cluster while keeping their resources separate.  
@@ -101,18 +101,41 @@ kubectl run nginx --image=nginx -n <namespace-name>
 
 7. Get the current namespace
 ```bash
-kubectl config view --minify --output 'jsonpath={..namespace}'
+kubectl config view --minify
 ```
-
+8. Get the all contexts avialable in your cluster
+```bash
+kubectl config get-contexts
+```
+9. Switch to another context:
+```bash
+kubectl config use-context test-context
+```
 ### Default Namespaces in Kubernetes  
 - default → Used when no namespace is specified.  
 - kube-system → Contains system-related components like the API server and controller manager.  
 - kube-public → Accessible to all users; used for public information.  
 - kube-node-lease → Manages node heartbeats to determine availability.  
-
+---
 # Pod
 ### What is a Pod?  
-A Pod is the smallest deployable unit in Kubernetes. It represents a logical host for one or more containers that share the same network and storage.
+A Pod is the smallest deployable unit in Kubernetes. It acts as a logical host for one or more containers that share the same network namespace, storage, and lifecycle.  
+
+A Pod has a single IP, regardless of the number of containers inside it.  
+- All containers within a pod share the same network namespace, allowing them to communicate using localhost.  
+- The best practice is to have one container per pod unless additional sidecar containers (e.g., for logging or monitoring) are needed.  
+
+Pods are ephemeral (short-lived).  
+- Kubernetes does not guarantee pod longevity. If a node fails or a pod is deleted, it won’t automatically restart unless managed by a controller such as a Deployment, StatefulSet, or DaemonSet.  
+- Applications should be designed with fault tolerance to handle pod failures effectively.  
+
+Avoid running standalone pods without controllers.  
+- Standalone pods do not have a mechanism to restart automatically if they fail.  
+- To ensure high availability and self-healing, use controllers such as:  
+  - Deployments for stateless applications  
+  - StatefulSets for stateful applications  
+  - DaemonSets for running pods on every node  
+  - Job/CronJob for batch and scheduled tasks
 
 ### **Pod Management Commands in Kubernetes**  
 
@@ -171,7 +194,7 @@ kubectl delete pod mypod
 kubectl delete pods --all -n <namespace-name>
 ```  
 
-#### **12. Get Pod Resource Usage (CPU & Memory)**  
+#### **12. Get Pod Resource Usage (CPU & Memory)** **need to install metric server** 
 ```bash
 kubectl top pod
 ```  
@@ -214,19 +237,118 @@ Storage | Uses ephemeral storage by default. | Can attach persistent storage and
 Scaling | Cannot be directly scaled in Kubernetes. | Scales as a whole unit in Kubernetes.  
 Management | Managed by container runtimes (Docker, containerd). | Managed by Kubernetes.  
 
-### InitContainers  
-InitContainers are special containers that run before the main application containers in a Pod.  
+Example of Init Containers in Kubernetes  
 
-### Why Use InitContainers?  
-- To prepare the environment before the main application starts.  
-- To ensure dependencies are met (e.g., waiting for a database to be ready).  
-- To perform setup tasks like downloading configuration files.  
+Init containers are specialized containers that run before the main application container starts. They are used for tasks like setting up configurations, waiting for dependencies, or performing database migrations.  
 
-### Key Points  
-- Runs sequentially before the main container starts.  
-- Can have different images from the main container.  
-- If an InitContainer fails, Kubernetes retries it until it succeeds or the Pod fails. 
+Scenario:  
+You have an Nginx pod, but before it starts, you need to download an index.html file from an external server and place it in a shared volume.  
 
+YAML Example:  
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+   app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - name: shared-data
+      mountPath: /usr/share/nginx/html
+  initContainers:
+  - name: init-git-clone
+    image: alpine/git
+    command:
+    - sh
+    - "-c"
+    - |
+      git clone https://github.com/sivaramakrishna-konka/hello-world.git /work-dir && \
+      cp /work-dir/wish.html /work-dir/index.html
+    volumeMounts:
+    - name: shared-data
+      mountPath: /work-dir
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+```  
+
+How It Works:  
+1. The `init-downloader` container runs first. It:  
+   - Uses the `busybox` image.  
+   - Runs `wget` to download an HTML file.  
+   - Stores the file in a shared volume (`emptyDir`).  
+
+2. Once the init container completes, the main Nginx container starts.  
+   - It serves the downloaded `index.html` from the shared volume.  
+
+Key Points About Init Containers:  
+- They always run before the main container.  
+- They must complete successfully before the main container starts.  
+- They can have different images and dependencies from the main container.  
+- All init containers are run sequentially, meaning one must complete before the next starts.  
+- Useful for setup tasks, data preparation, and waiting for services.
+---
+# Shared Netwrok
+Yes, if two containers are in the **same Pod**, they share the **same network namespace**, meaning they can communicate with each other using `localhost`.  
+
+### **Example: Shared Network in a Pod**  
+Here’s a simple example where two containers (`nginx` and `alpine`) are in the same Pod, and the `alpine` container pings the `nginx` container using `localhost`.  
+
+#### **YAML Example:**  
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shared-network-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  - name: alpine
+    image: alpine
+    command: ["sh", "-c", "sleep 3600"]
+```
+
+#### **How It Works:**  
+1. The Pod has **two containers**:  
+   - `nginx` (web server)  
+   - `alpine` (used for testing network communication)  
+
+2. Since they are in the **same Pod**, they share the same **network namespace** and can communicate over `localhost`.  
+
+#### **Testing Inside the Pod:**  
+After the Pod is running, you can **exec into the `alpine` container** and ping the `nginx` container:  
+```sh
+kubectl exec -it shared-network-pod -c alpine -- sh
+```
+Now inside the container, try:  
+```sh
+ping localhost
+curl localhost
+```
+Both should work, confirming that both containers share the same network namespace.
+
+#### **Key Points:**  
+- Containers in the same **Pod** can communicate over `localhost`.  
+- They **do not** need a separate IP address since they share the same **network namespace**.  
+- This is useful for **sidecar patterns**, such as logging, monitoring, or security proxies.  
+---
 ### What is a Pause Container?  
 A Pause Container is a special container that acts as the parent container for all containers within a Pod in Kubernetes. It is created automatically by Kubernetes when a Pod is scheduled.  
 
@@ -250,9 +372,8 @@ Kubernetes uses Pause Containers for networking and process management within a 
 ### Command to View Pause Containers  
 On a Kubernetes Node, you can check the running Pause Containers using:  
 ```bash
-docker ps | grep pause  
-# OR for containerd
-crictl ps | grep pause
+sudo ctr -n k8s.io containers ls
+sudo ctr -n k8s.io containers list
 ```
 ### Key Takeaways  
 - The Pause Container is the first container started in a Pod.  
