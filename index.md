@@ -5,11 +5,9 @@
   - initContainers
 - Namespaces
 - Labels & Selectors
-
 # Day-2[kubeadm][13-03-2024]
 - Replicaset & Replication Controller
 - Deployment
-- Expense Frontend and Backend Manifestation
 - Resource Management
 - Metrics Server
 - HPA
@@ -19,66 +17,52 @@
 - Services[ClusterIP,NodePort,Headless,ExternalService]
 - CoreDNS pods
 - kube-dns service
-- Expense mysql manifestation
-
 # Day-4[kubeadm][15-03-2024]
 - ConfigMap
 - Secrets
 - Probes
-
-# Day-5[EKS][17-03-2024]
+# Day-5[kubeadm][17-03-2024]
 - Dynamic & Static Volume Provisioning[EBS CSI Driver Installation&PodIdentity]
   - volumes reclaims
   - accessMode
-- Manifestation of Instana
-
 # Day-6[kubeadm]
-- Helmify Expense
-- Helmify Instana
-
-# Day-7[EKS]
-- ServiceAccount
-- RBAC
-- Network Policy
-
-# Day-8[EKS][kubeadm]
+- expense and instana manifestation
+# Day-7[kubeadm]
+- Helmify Expense and Instana
+# Day-8[kubeadm]
 - NodeSelector
 - Affinity & Anti Affinity
 - Taints & Tolerations
-
 # Day-9[EKS]
+- ServiceAccount
+- RBAC
+- Network Policy
+# Day-10[EKS]
 - LoadBalancer Service
 - Ingress
 - External DNS
 - Annotations
-
-# Day-10[EKS]
+# Day-11[EKS]
 - Resource Quotas
 - Limit Ranges
 - HV
 - ESO
-
-# Day-11
+# Day-12
 - Monitoring[Proemtheus&Grafana]
 - NodeExporter
 - ec2 labels to dynamically monitor nodes
-
-# Day-12
+# Day-13
 - Logging
 - Daemonset
 - hostPath
-
-# Day-13
-- ISTIO[SideCar & Envoy]
-
 # Day-14
+- Terraform way to create cluster
+# Day-16
+- ISTIO[SideCar & Envoy]
+# Day-17
 - Karpenter
 - ArGoCD
-
-# Day-15
-- Terraform EKS Cluster
-
-# Day-16
+# Day-18
 - Cluster Upgradation 
 
 
