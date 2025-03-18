@@ -51,8 +51,6 @@ Worker nodes host and execute containerized applications.
 - `Container` Runtime (Docker, containerd, CRI-O, etc.) → Runs and manages containerized workloads.  
 - `Kube Proxy` → Manages networking and load balancing between Pods and Services.  
 - `Pods` → The smallest deployable unit in Kubernetes that contains one or more containers.
-
-- EKS cluster creation with eksctl with yaml definition
 - `kubectl (Kubernetes command-line tool)` is used to interact with Kubernetes clusters. It allows you to deploy applications, inspect and manage cluster resources, and troubleshoot issues in a Kubernetes environment.
 ---
 # NameSpaces
