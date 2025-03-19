@@ -53,6 +53,8 @@ Worker nodes host and execute containerized applications.
 - `Pods` → The smallest deployable unit in Kubernetes that contains one or more containers.
 - `kubectl (Kubernetes command-line tool)` is used to interact with Kubernetes clusters. It allows you to deploy applications, inspect and manage cluster resources, and troubleshoot issues in a Kubernetes environment.
 ---
+- kubeadm cluster creation
+---
 # NameSpaces
 ### What is a Namespace in Kubernetes?  
 A **Namespace** in Kubernetes is a way to logically isolate resources within a cluster. It allows multiple teams or applications to share a single cluster while keeping their resources separate.  
