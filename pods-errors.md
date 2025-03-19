@@ -119,3 +119,33 @@ Here’s a list of common Kubernetes (k8s) pod errors, their causes, and how to 
    - **Fix:** Change `imagePullPolicy` to `Always` or `IfNotPresent`, or ensure the image exists on the node.
 
 ---
+
+# Errors in pod step by step[Pod status]
+`stage1:`
+kubectl apply -f deployment.yaml received by API server checks auth and authorization and validates the manifest file once everything is passed store into etcd now the status is `pod is assigned` status
+
+`stage2` scheduler responsible for find best fit node for 
+- pod assigned
+- pod not scheduled
+- pod scheduled container creation error
+- pod schduled container runtime error
+
+**pending**[pod not getting assigned/not scheduled][for debugging such pending issues we can do kubectl describe]
+- insufficient memory
+- did not match nodeaffinity/nodeselector
+- unbound pv
+- node is tainted
+
+**pod assigned/scheduled**[for debugging such below errors kubectl logs]
+- unable to pull image due to lack of permissions,image not available
+- configmap to secrets wrong,names mismatch
+- desired rs is 3 but it will create only 2 i.e reason is resource quota
+- crashloopbackoff container creation failed so container creation started again, failed ,start this is loop so 
+  - OOM out of memory[talk to QA to get how much memeory needed]
+  - Health Check fails[talk to dev to team any change in path or port]
+  - Init container not completed successfully
+  - connections issues
+
+- application not able to access
+ - mismatch between service and pod[issues n/w or communications issue]
+

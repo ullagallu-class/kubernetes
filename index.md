@@ -57,13 +57,14 @@
 - hostPath
 # Day-14
 - Terraform way to create cluster
-# Day-16
+# Day-16[maybe]
 - ISTIO[SideCar & Envoy]
 # Day-17
 - Karpenter
 - ArGoCD
 # Day-18
 - Cluster Upgradation 
+
 
 
 
