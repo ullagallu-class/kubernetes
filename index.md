@@ -70,6 +70,41 @@
 
 
 
+# Project 1[6 micro services[Instana]]
+Deployment Environment: EKS
+Programming Languages: Java[1],NodeJs[3],Python[1],ReactJs[frontend]
 
+- Setup EKS cluster using terraform
+  modules:
+  - VPC
+  - SG:
+     - Control Plane
+     - Node Group
+     - ALB
+  - IAM Groups and Users for EKS 
+  - Pod Identitys
+  - EKS CLuster[ControlPlane+NodeGroup]
+  - ALB
+  - CloudFront
+  - WAF
+  CRDS installation using Terraform
+  - ALB Ingress Controller
+  - External Secret Operator
+  - External DNS Controller
+- Scanning helm charts and terraform config files using trivy for vulenrabilities
 
+- setup CI/CD pipelines to deploy app[DevSecOps]
+  CI steps:
+  - Declarative Checkout
+  - Owasp Dependency Check
+  - Docker build
+  - Image Scanning
+  - Image Push
+  for CI -- using Jenkins CD Github Actions
+
+- for secrets managment i'm using HashiCorp Vault
+- Setup Montoring for CI/CD 
+- Setup Montoring Using Prometheus and Grafana
+- Setup Elastic Stack for Logging
+- Istio
 
