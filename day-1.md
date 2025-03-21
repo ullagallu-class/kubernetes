@@ -225,7 +225,13 @@ A Pod goes through different phases from creation to termination. The Pod Lifecy
 2. Running → The Pod is scheduled on a Node, and all containers are running or starting.  
 3. Succeeded → All containers in the Pod have completed successfully and will not restart.  
 4. Failed → One or more containers in the Pod have failed, and Kubernetes will not restart them.  
-5. Unknown → The Pod state cannot be determined due to communication failure with the Node.  
+5. Unknown → The Pod state cannot be determined due to communication failure with the Node.
+
+When we say **"Pod is created"**, it means the **Kubernetes API server** has received the request to create a Pod and has stored its definition in **etcd (Kubernetes' key-value store)**.  
+
+At this point, the Pod object **exists in Kubernetes**, but it does not yet have a Node assigned to run on. The Kubernetes scheduler is responsible for picking a suitable Node based on resources, affinity rules, and other constraints.  
+
+So, **"Pod created" does not mean it is running**—it only means that Kubernetes knows about it and is working on placing it on a Node.
 
 ### Difference Between Container and Pod  
 
