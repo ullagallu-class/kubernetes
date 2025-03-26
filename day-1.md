@@ -388,8 +388,6 @@ sudo ctr -n k8s.io containers list
 - It uses very low resources since it only runs a sleep process.  
 
 # Labels & Selectors
-### Labels & Selectors in Kubernetes  
-
 #### Labels Purpose  
 Labels are key-value pairs attached to Kubernetes objects (Pods, Services, Deployments, etc.). They help in organizing and grouping resources for easier management.  
 
