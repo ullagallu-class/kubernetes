@@ -22,7 +22,7 @@
 - Secrets
 - Probes
 # Day-5[kubeadm][17-03-2024]
-- Dynamic & Static Volume Provisioning[EBS CSI Driver Installation&PodIdentity]
+- Dynamic & Static Volume Provisioning[EBS CSI Driver Installation & PodIdentity]
   - volumes reclaims
   - accessMode
 # Day-6[kubeadm]
